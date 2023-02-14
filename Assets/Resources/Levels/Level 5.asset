@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66c50d8b7d2f0024f8a33c573e744705, type: 3}
+  m_Name: Level 5
+  m_EditorClassIdentifier: 
+  Units:
+  - Unit: {fileID: 11400000, guid: a7fd97bf306c875449a29b3fd9a87e47, type: 2}
+    x: 1
+    y: 7
+  - Unit: {fileID: 11400000, guid: 35fddf8bad6227442b6483dfd6aa4b33, type: 2}
+    x: 3
+    y: 3
+  - Unit: {fileID: 11400000, guid: 0ce2f6e71ee8df043b003199f7968556, type: 2}
+    x: 4
+    y: 3
+  - Unit: {fileID: 11400000, guid: 0ce2f6e71ee8df043b003199f7968556, type: 2}
+    x: 4
+    y: 2
+  - Unit: {fileID: 11400000, guid: 0ce2f6e71ee8df043b003199f7968556, type: 2}
+    x: 3
+    y: 2
+  - Unit: {fileID: 11400000, guid: 0ce2f6e71ee8df043b003199f7968556, type: 2}
+    x: 2
+    y: 2
+  - Unit: {fileID: 11400000, guid: 0ce2f6e71ee8df043b003199f7968556, type: 2}
+    x: 2
+    y: 3
+  Width: 10
+  Height: 10
+  IsLocked: 0
