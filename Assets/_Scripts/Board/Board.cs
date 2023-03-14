@@ -27,6 +27,10 @@ public class Board : MonoBehaviour
         get { return _units; }
     }
 
+    public List<Tile> Tiles
+    {
+        get { return _tileDict.Values.ToList(); }
+    }
 
     private void Awake()
     {
@@ -98,7 +102,7 @@ public class Board : MonoBehaviour
         }
     }
 
-    public void SpawnUnits(List<UnitSpawnPoint> units)
+/*    public void SpawnUnits(List<UnitSpawnPoint> units)
     {
         foreach (var unitSpawnPoint in units)
         {
@@ -116,6 +120,25 @@ public class Board : MonoBehaviour
             }
             _units.Add(spawnedUnit);
         }
+    }*/
+
+    public void SpawnUnit(UnitSO unit, Tile tile)
+    {
+        var spawnedUnit = Instantiate(unit.UnitPrefab, _unitsContainer.transform);
+        spawnedUnit.Board = this;
+        spawnedUnit.transform.localPosition = new Vector3(tile.Position.x, 0.5f, tile.Position.y);
+
+        //spawnedUnit.Init();
+        //spawnedUnit.Movement.MoveTo(tile);
+        if (tile.Position.y >= _height - 4)
+        {
+            spawnedUnit.transform.LookAt(transform.position - new Vector3(0, 0, 1) + new Vector3(0, 0.5f, 0), Vector3.up);
+        }
+        if (tile.Position.y <= 3)
+        {
+            spawnedUnit.transform.LookAt(transform.position + new Vector3(0, 0.5f, 1), Vector3.up);
+        }
+        //_units.Add(spawnedUnit);
     }
 
     public List<Tile> GetTilesInDirection(Tile startTile, Vector2 direction, int range = 0)
@@ -163,7 +186,6 @@ public class Board : MonoBehaviour
             for (var z = 0; z < _height; z++)
             {
                 Gizmos.DrawCube(new Vector3(x, 0, z), new Vector3(0.95f, 0.001f, 0.95f));
-
             }
         }
     }

@@ -38,7 +38,11 @@ public class Unit : MonoBehaviour
     public Movement Movement => _movement;
     public Combat Combat => _combat;
     public AI AI => _ai;
-
+    public Board Board
+    {
+        get { return _board; }
+        set { _board = value; }
+    }
     public bool IsDead {
         get { return _isDead; }
         set { _isDead = value; }

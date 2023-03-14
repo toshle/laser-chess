@@ -101,6 +101,10 @@ public class Movement : MonoBehaviour
         _unit.Tile = tile;
         var target = _targetTile.transform.position + new Vector3(0, 0.5f, 0);
         _unit.transform.LookAt(target, Vector3.up);
+        if(tile.Effect != null)
+        {
+            tile.Effect.Activate();
+        }
     }
 
     public List<Tile> CalculatePossibleMoves()
