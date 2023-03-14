@@ -8,6 +8,7 @@ public class Unit : MonoBehaviour
     [SerializeField] private int _maxHP;
     [SerializeField] private int _HP;
     [SerializeField] private string _name;
+    [SerializeField] private Board _board;
     [SerializeField] private Tile _tile;
     [SerializeField] private Movement _movement;
     [SerializeField] private Combat _combat;
@@ -37,7 +38,11 @@ public class Unit : MonoBehaviour
     public Movement Movement => _movement;
     public Combat Combat => _combat;
     public AI AI => _ai;
-
+    public Board Board
+    {
+        get { return _board; }
+        set { _board = value; }
+    }
     public bool IsDead {
         get { return _isDead; }
         set { _isDead = value; }
@@ -64,6 +69,7 @@ public class Unit : MonoBehaviour
     {
         Tile.TileSelected += OnTileSelected;
         GameManager.TurnStarted += OnTurnStarted;
+        Init();
     }
     private void OnDisable()
     {
@@ -71,10 +77,15 @@ public class Unit : MonoBehaviour
         GameManager.TurnStarted -= OnTurnStarted;
     }
 
-    public void Init(Tile tile)
+    public void Init()
     {
+        var x = (int)Math.Round(transform.localPosition.x);
+        var y = (int)Math.Round(transform.localPosition.z);
+        var tile = _board.GetTileAtPosition(new Vector2(x, y));
         _tile = tile;
         tile.Unit = this;
+        _board.AddUnit(this);
+        _movement.MoveTo(tile);
     }
 
     private void OnTurnStarted()

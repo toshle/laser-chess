@@ -12,6 +12,8 @@ public class Tile : MonoBehaviour
 
     [SerializeField] private Unit _unit;
 
+    [SerializeField] private EffectBase _effect;
+
     [SerializeField] private TileState _state;
 
     private bool _isSelected = false;
@@ -51,6 +53,12 @@ public class Tile : MonoBehaviour
     {
         get { return _unit; }
         set { _unit = value; }
+    }
+
+    public EffectBase Effect
+    {
+        get { return _effect; }
+        set { _effect = value; }
     }
 
     public bool IsSelected

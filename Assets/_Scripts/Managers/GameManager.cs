@@ -1,8 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _currentLevel;
 
     [SerializeField] private GameObject _canvasesContainer;
+    [SerializeField] private GameObject _loadingPrefab;
     [SerializeField] private MainMenu _mainMenuPrefab;
     [SerializeField] private PauseMenu _pauseMenuPrefab;
     [SerializeField] private SelectLevel _selectLevelPrefab;
@@ -22,7 +24,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AIManager _AIManagerPrefab;
 
     private AIManager _AIManagerInstance;
-    private Board _boardInstance;
+    public static Board BoardInstance;
     private HUD _hudInstance;
 
     private bool _isPaused;
@@ -44,7 +46,14 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        Instance = this;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
 
         _levels = Resources.LoadAll<LevelSO>("Levels").ToList();
     }
@@ -74,16 +83,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void UpdateGameState(GameState newState)
+    public async void UpdateGameState(GameState newState)
     {
         State = newState;
 
         switch (newState)
         {
             case GameState.MainMenu:
-                if(_boardInstance != null)
+                if(BoardInstance != null)
                 {
-                    DestroyLevel();
+                    UnloadLevel();
                 }
                 SoundManager.Instance.PlayMenuMusic();
                 Instantiate(_mainMenuPrefab, _canvasesContainer.transform);
@@ -92,12 +101,13 @@ public class GameManager : MonoBehaviour
                 Instantiate(_selectLevelPrefab, _canvasesContainer.transform);
                 break;
             case GameState.GenerateBoard:
-                _boardInstance = Instantiate(_boardPrefab);
-                _boardInstance.Init(_levels[_currentLevel]);
+                var loadingInstance = Instantiate(_loadingPrefab, _canvasesContainer.transform);
+                await LoadLevel(_currentLevel);
+                Destroy(loadingInstance);
                 _hudInstance = Instantiate(_hudPrefab, _canvasesContainer.transform);
-                _hudInstance.Init(_boardInstance);
+                _hudInstance.Init(BoardInstance);
                 _AIManagerInstance = Instantiate(_AIManagerPrefab);
-                _AIManagerInstance.Init(_boardInstance);
+                _AIManagerInstance.Init(BoardInstance);
                 UpdateGameState(GameState.PlayerTurn);
                 SoundManager.Instance.PlayBattleMusic();
                 break;
@@ -110,12 +120,12 @@ public class GameManager : MonoBehaviour
                 _AIManagerInstance.PlayTurn();
                 break;
             case GameState.Win:
-                DestroyLevel();
+                UnloadLevel();
                 var win = Instantiate(_endGamePrefab, _canvasesContainer.transform);
                 win.Init(Faction.Human);
                 break;
             case GameState.Lose:
-                DestroyLevel();
+                UnloadLevel();
                 var lose = Instantiate(_endGamePrefab, _canvasesContainer.transform);
                 lose.Init(Faction.AI);
                 break;
@@ -128,7 +138,7 @@ public class GameManager : MonoBehaviour
     {
         if(unit.Faction == Faction.Human)
         {
-            var unitsAlive = _boardInstance.Units.Where(unit => unit.Faction == Faction.Human && !unit.IsDead).Count();
+            var unitsAlive = BoardInstance.Units.Where(unit => unit.Faction == Faction.Human && !unit.IsDead).Count();
             if(unitsAlive == 0)
             {
                 UpdateGameState(GameState.Lose);
@@ -137,7 +147,7 @@ public class GameManager : MonoBehaviour
         {
             if(unit.AI.Priority == 3)
             {
-                var commandUnitsAlive = _boardInstance.Units.Where(unit => unit.Faction == Faction.AI && unit.AI.Priority == 3 && !unit.IsDead).Count();
+                var commandUnitsAlive = BoardInstance.Units.Where(unit => unit.Faction == Faction.AI && unit.AI.Priority == 3 && !unit.IsDead).Count();
                 if (commandUnitsAlive == 0)
                 {
                     UpdateGameState(GameState.Win);
@@ -170,12 +180,12 @@ public class GameManager : MonoBehaviour
         {
             if(_isPaused)
             {
-                _boardInstance.gameObject.SetActive(true);
+                BoardInstance.gameObject.SetActive(true);
                 _hudInstance.gameObject.SetActive(true);
                 _isPaused = false;
             } else
             {
-                _boardInstance.gameObject.SetActive(false);
+                BoardInstance.gameObject.SetActive(false);
                 _hudInstance.gameObject.SetActive(false);
                 Instantiate(_pauseMenuPrefab, _canvasesContainer.transform);
                 _isPaused = true;
@@ -183,11 +193,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void DestroyLevel()
+    private async Task LoadLevel(int index)
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(_levels[index].sceneName, LoadSceneMode.Additive);
+        while (!asyncLoad.isDone)
+        {
+            await Task.Yield();                
+        }
+    }
+
+    private void UnloadLevel()
     {
         Destroy(_AIManagerInstance.gameObject);
-        Destroy(_boardInstance.gameObject);
+        Destroy(BoardInstance.gameObject);
         Destroy(_hudInstance.gameObject);
+        SceneManager.UnloadSceneAsync(_levels[_currentLevel].sceneName);
     }
 }
 

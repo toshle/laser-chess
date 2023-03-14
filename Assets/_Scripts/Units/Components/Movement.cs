@@ -34,12 +34,16 @@ public class Movement : MonoBehaviour
     {
         if (_targetTile != null)
         {
-            if (transform.position != _targetTile.transform.position)
+            if (transform.position != _targetTile.transform.position + new Vector3(0, 0.5f, 0))
             {
                 var target = _targetTile.transform.position + new Vector3(0, 0.5f, 0);
                 transform.position = Vector3.Lerp(transform.position, target, _movementSpeed * Time.deltaTime);
             } else
             {
+                if (_targetTile.Effect != null)
+                {
+                    _targetTile.Effect.Activate(_unit);
+                }
                 _targetTile = null;
             }
         }
@@ -68,7 +72,6 @@ public class Movement : MonoBehaviour
     {
         if(unit == _unit)
         {
-            //Debug.Log("I want to move here: " + tile);
             TryToMove(tile);
         }
     }
