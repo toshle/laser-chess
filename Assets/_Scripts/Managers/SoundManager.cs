@@ -22,7 +22,14 @@ public class SoundManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
         Combat.UnitAttacked += PlayAttack;
     }
 

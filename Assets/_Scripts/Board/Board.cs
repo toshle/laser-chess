@@ -11,10 +11,8 @@ public class Board : MonoBehaviour
     [SerializeField] private GameObject _tileContainer;
     [SerializeField] private GameObject _unitsContainer;
 
-    //private List<LevelSO> _levels;
-
-    private Dictionary<Vector2, Tile> _tileDict;
-    private Dictionary<Vector2, Unit> _unitsDict;
+    public Dictionary<Vector2, Tile> _tileDict;
+    private List<Unit> _units;
 
     private Tile _selectedTile;
 
@@ -26,17 +24,19 @@ public class Board : MonoBehaviour
 
     public List<Unit> Units
     {
-        get { return _unitsDict.Values.ToList(); }
+        get { return _units; }
     }
 
 
     private void Awake()
     {
         _tileDict = new Dictionary<Vector2, Tile>();
-        _unitsDict = new Dictionary<Vector2, Unit>();
+        _units = new List<Unit>();
         Tile.TileSelected += OnSelectTile;
 
-        //_levels = Resources.LoadAll<LevelSO>("Levels").ToList();
+        GameManager.BoardInstance = this;
+        GenerateBoard(_width, _height);
+        transform.position = new Vector3(-(float)_width / 2 + 0.5f, 0, -(float)_height / 2 + 0.5f);
     }
 
     private void OnDisable()
@@ -44,11 +44,9 @@ public class Board : MonoBehaviour
         Tile.TileSelected -= OnSelectTile;
     }
 
-    public void Init(LevelSO level)
+    public void AddUnit(Unit unit)
     {
-        GenerateBoard(level.Width, level.Height);
-        SpawnUnits(level.Units);
-        transform.position = new Vector3(-(float)_width / 2 + 0.5f, 0, -(float)_height / 2 + 0.5f);
+        _units.Add(unit);
     }
 
     private void OnSelectTile(Tile tile)
@@ -106,7 +104,7 @@ public class Board : MonoBehaviour
         {
             var spawnedUnit = Instantiate(unitSpawnPoint.Unit.UnitPrefab, _unitsContainer.transform);
             var tile = _tileDict[new Vector2(unitSpawnPoint.x, unitSpawnPoint.y)];
-            spawnedUnit.Init(tile);
+            spawnedUnit.Init();
             spawnedUnit.Movement.MoveTo(tile);
             if(unitSpawnPoint.y >= _height - 4)
             {
@@ -116,7 +114,7 @@ public class Board : MonoBehaviour
             {
                 spawnedUnit.transform.LookAt(transform.position + new Vector3(0, 0.5f, 1), Vector3.up);
             }
-            _unitsDict[new Vector2(unitSpawnPoint.x, unitSpawnPoint.y)] = spawnedUnit;
+            _units.Add(spawnedUnit);
         }
     }
 
@@ -155,5 +153,18 @@ public class Board : MonoBehaviour
         }
 
         return null;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(0, 1, 1, 1);
+        for (var x = 0; x < _width; x++)
+        {
+            for (var z = 0; z < _height; z++)
+            {
+                Gizmos.DrawCube(new Vector3(x, 0, z), new Vector3(0.95f, 0.001f, 0.95f));
+
+            }
+        }
     }
 }

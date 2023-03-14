@@ -108,8 +108,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddcceaefd2fd56d44bb4e3966976c9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _width: 0
-  _height: 0
+  _width: 8
+  _height: 8
   _tilePrefab: {fileID: 2817735985892933650, guid: a9f70fd9cfbc408409165c2faa0c9348, type: 3}
   _tileContainer: {fileID: 1247137146753593559}
   _unitsContainer: {fileID: 20372009036222593}

@@ -703,6 +703,7 @@ MonoBehaviour:
   _levels: []
   _currentLevel: 0
   _canvasesContainer: {fileID: 1330432557}
+  _loadingPrefab: {fileID: 1905887440894059991, guid: eaf5a23a0da84ba4888c84b5f41af8f9, type: 3}
   _mainMenuPrefab: {fileID: -6544276502356967227, guid: b5ebea8c6220f72498e2ada674a5194d, type: 3}
   _pauseMenuPrefab: {fileID: -5468930066904659964, guid: 1815b0957c7c7a34ba9812c1c3bf438f, type: 3}
   _selectLevelPrefab: {fileID: 6418966702951028947, guid: 5478dea474330cd40a06bcf85d29425d, type: 3}
