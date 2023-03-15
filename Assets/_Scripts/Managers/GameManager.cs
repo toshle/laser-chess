@@ -2,7 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -23,9 +27,11 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private AIManager _AIManagerPrefab;
 
+    private AsyncOperationHandle<SceneInstance> _loadedLevel;
     private AIManager _AIManagerInstance;
     public static Board BoardInstance;
     private HUD _hudInstance;
+    private GameObject _loadingInstance;
 
     private bool _isPaused;
 
@@ -83,7 +89,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public async void UpdateGameState(GameState newState)
+    public void UpdateGameState(GameState newState)
     {
         State = newState;
 
@@ -101,13 +107,8 @@ public class GameManager : MonoBehaviour
                 Instantiate(_selectLevelPrefab, _canvasesContainer.transform);
                 break;
             case GameState.GenerateBoard:
-                var loadingInstance = Instantiate(_loadingPrefab, _canvasesContainer.transform);
-                await LoadLevel(_currentLevel);
-                Destroy(loadingInstance);
-                _hudInstance = Instantiate(_hudPrefab, _canvasesContainer.transform);
-                _hudInstance.Init(BoardInstance);
-                _AIManagerInstance = Instantiate(_AIManagerPrefab);
-                _AIManagerInstance.Init(BoardInstance);
+                LoadLevel(_currentLevel);
+                
                 UpdateGameState(GameState.PlayerTurn);
                 SoundManager.Instance.PlayBattleMusic();
                 break;
@@ -193,13 +194,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private async Task LoadLevel(int index)
+    private void OnLevelLoaded(AsyncOperationHandle<SceneInstance> loadedLevel)
     {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(_levels[index].sceneName, LoadSceneMode.Additive);
-        while (!asyncLoad.isDone)
+        if(loadedLevel.Status == AsyncOperationStatus.Succeeded)
         {
-            await Task.Yield();                
+            Destroy(_loadingInstance);
+            _hudInstance = Instantiate(_hudPrefab, _canvasesContainer.transform);
+            _hudInstance.Init(BoardInstance);
+            _AIManagerInstance = Instantiate(_AIManagerPrefab);
+            _AIManagerInstance.Init(BoardInstance);
         }
+    }
+
+    private void LoadLevel(int index)
+    {
+        _loadingInstance = Instantiate(_loadingPrefab, _canvasesContainer.transform);
+        _loadedLevel = Addressables.LoadSceneAsync(_levels[index].reference, LoadSceneMode.Additive);
+        _loadedLevel.Completed += OnLevelLoaded;
     }
 
     private void UnloadLevel()
@@ -207,7 +218,7 @@ public class GameManager : MonoBehaviour
         Destroy(_AIManagerInstance.gameObject);
         Destroy(BoardInstance.gameObject);
         Destroy(_hudInstance.gameObject);
-        SceneManager.UnloadSceneAsync(_levels[_currentLevel].sceneName);
+        Addressables.UnloadSceneAsync(_loadedLevel);
     }
 }
 
