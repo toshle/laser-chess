@@ -11,9 +11,12 @@ public class Reinforcement : EffectBase
         {
             Debug.Log("Reinforcement " + unit.name);
             var freeTiles = _board.Tiles.Where(tile => tile.Unit == null && tile.Position.y < 2).ToList();
-            var index = Random.Range(0, freeTiles.Count);
-            _board.SpawnUnit(unit, freeTiles[index]);
-            Destroy(gameObject);
+            if(freeTiles.Count > 0)
+            {
+                var index = Random.Range(0, freeTiles.Count);
+                _board.SpawnUnit(unit, freeTiles[index]);
+                Destroy(gameObject);
+            }
         }
     }
 }

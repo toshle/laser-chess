@@ -81,8 +81,8 @@ public class Unit : MonoBehaviour
 
     public void Init()
     {
-        var x = (int)Math.Floor(Math.Abs(transform.localPosition.x));
-        var y = (int)Math.Floor(Math.Abs(transform.localPosition.z));
+        var x = (int)Math.Round(Math.Abs(transform.localPosition.x));
+        var y = (int)Math.Round(Math.Abs(transform.localPosition.z));
         var tile = _board.GetTileAtPosition(new Vector2(x, y));
         _tile = tile;
         tile.Unit = this;
