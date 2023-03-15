@@ -12,68 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66c50d8b7d2f0024f8a33c573e744705, type: 3}
   m_Name: Level 1
   m_EditorClassIdentifier: 
-  Units:
-  - Unit: {fileID: 11400000, guid: a7fd97bf306c875449a29b3fd9a87e47, type: 2}
-    x: 4
-    y: 7
-  - Unit: {fileID: 11400000, guid: a7fd97bf306c875449a29b3fd9a87e47, type: 2}
-    x: 3
-    y: 7
-  - Unit: {fileID: 11400000, guid: b897650370a70b2459113562596154e6, type: 2}
-    x: 2
-    y: 6
-  - Unit: {fileID: 11400000, guid: b897650370a70b2459113562596154e6, type: 2}
-    x: 3
-    y: 6
-  - Unit: {fileID: 11400000, guid: b897650370a70b2459113562596154e6, type: 2}
-    x: 4
-    y: 6
-  - Unit: {fileID: 11400000, guid: b897650370a70b2459113562596154e6, type: 2}
-    x: 5
-    y: 6
-  - Unit: {fileID: 11400000, guid: b897650370a70b2459113562596154e6, type: 2}
-    x: 1
-    y: 5
-  - Unit: {fileID: 11400000, guid: b897650370a70b2459113562596154e6, type: 2}
-    x: 6
-    y: 5
-  - Unit: {fileID: 11400000, guid: b897650370a70b2459113562596154e6, type: 2}
-    x: 3
-    y: 4
-  - Unit: {fileID: 11400000, guid: b897650370a70b2459113562596154e6, type: 2}
-    x: 4
-    y: 4
-  - Unit: {fileID: 11400000, guid: b897650370a70b2459113562596154e6, type: 2}
-    x: 0
-    y: 7
-  - Unit: {fileID: 11400000, guid: b897650370a70b2459113562596154e6, type: 2}
-    x: 7
-    y: 7
-  - Unit: {fileID: 11400000, guid: c0290de217e4fa34a8c29f81e1108c85, type: 2}
-    x: 0
-    y: 1
-  - Unit: {fileID: 11400000, guid: c0290de217e4fa34a8c29f81e1108c85, type: 2}
-    x: 1
-    y: 1
-  - Unit: {fileID: 11400000, guid: c0290de217e4fa34a8c29f81e1108c85, type: 2}
-    x: 3
-    y: 1
-  - Unit: {fileID: 11400000, guid: c0290de217e4fa34a8c29f81e1108c85, type: 2}
-    x: 4
-    y: 1
-  - Unit: {fileID: 11400000, guid: c0290de217e4fa34a8c29f81e1108c85, type: 2}
-    x: 6
-    y: 1
-  - Unit: {fileID: 11400000, guid: c0290de217e4fa34a8c29f81e1108c85, type: 2}
-    x: 7
-    y: 1
-  - Unit: {fileID: 11400000, guid: 842167198e75f224c94137d03eba4b83, type: 2}
-    x: 3
-    y: 0
-  - Unit: {fileID: 11400000, guid: 842167198e75f224c94137d03eba4b83, type: 2}
-    x: 4
-    y: 0
+  reference:
+    m_AssetGUID: 19172465b1472174d8dff49957fd8bfc
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
   sceneName: Level 1
-  Width: 8
-  Height: 8
   IsLocked: 0

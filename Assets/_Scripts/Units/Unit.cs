@@ -1,6 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
@@ -15,6 +14,7 @@ public class Unit : MonoBehaviour
     [SerializeField] private AI _ai;
     [SerializeField] private UnitState _state;
     [SerializeField] private Faction _faction;
+    [SerializeField] private int _order;
 
     [SerializeField] private bool _isSelected = false;
     [SerializeField] private bool _hasMoved = false;
@@ -32,8 +32,10 @@ public class Unit : MonoBehaviour
         get { return _HP; }
         set { _HP = value; }
     }
+
     public int MaxHP => _maxHP;
     public string Name => _name;
+    public int Order => _order;
     public UnitState State => _state;
     public Movement Movement => _movement;
     public Combat Combat => _combat;
@@ -79,8 +81,8 @@ public class Unit : MonoBehaviour
 
     public void Init()
     {
-        var x = (int)Math.Round(transform.localPosition.x);
-        var y = (int)Math.Round(transform.localPosition.z);
+        var x = (int)Math.Floor(Math.Abs(transform.localPosition.x));
+        var y = (int)Math.Floor(Math.Abs(transform.localPosition.z));
         var tile = _board.GetTileAtPosition(new Vector2(x, y));
         _tile = tile;
         tile.Unit = this;
@@ -149,6 +151,20 @@ public class Unit : MonoBehaviour
             default:
                 break;
         }
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(1, 1, 0, 1);
+        var gizmoSize = 0.8f;
+        Gizmos.DrawLine(new Vector3(-gizmoSize / 2 + transform.position.x, 0, -gizmoSize / 2 + transform.position.z), new Vector3(-gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z));
+        Gizmos.DrawLine(new Vector3(gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z), new Vector3(-gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z));
+        Gizmos.DrawLine(new Vector3(gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z), new Vector3(gizmoSize / 2 + transform.position.x, 0, -gizmoSize / 2 + transform.position.z));
+        Gizmos.DrawLine(new Vector3(-gizmoSize / 2f + transform.position.x, 0, -gizmoSize / 2 + transform.position.z), new Vector3(gizmoSize / 2 + transform.position.x, 0, -gizmoSize / 2 + transform.position.z));
+        var style = GUIStyle.none;
+        style.fontSize = 32;
+        style.alignment = TextAnchor.MiddleCenter;
+
+        Handles.Label(transform.position + new Vector3(0, 1.5f, 0), _order.ToString(), style);
     }
 }
 

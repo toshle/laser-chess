@@ -1,7 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class HUD : MonoBehaviour
@@ -19,17 +19,21 @@ public class HUD : MonoBehaviour
 
     [SerializeField] private Board _board;
 
+    private List<UnitBar> _unitBars = new();
+
     public static event Action PlayerTurnEnded;
     public static event Action AITurnSkipped;
 
     void Start()
     {
+        Board.UnitSpawned += AddUnitBar;
         GameManager.TurnStarted += OnTurnStarted;
     }
 
     private void OnDisable()
     {
         GameManager.TurnStarted -= OnTurnStarted;
+        Board.UnitSpawned -= AddUnitBar;
     }
 
     void Update()
@@ -45,17 +49,26 @@ public class HUD : MonoBehaviour
 
     public void Init(Board board)
     {
-        _board = board;
-        foreach( var unit in _board.Units) {
-            if(unit.Faction == Faction.Human)
-            {
-                var unitBar = Instantiate(_leftUnitPrefab, _leftSideContainer.transform);
-                unitBar.Init(unit);
-            } else
-            {
-                var unitBar = Instantiate(_rightUnitPrefab, _rightSideContainer.transform);
-                unitBar.Init(unit);
-            }
+        _board = board; 
+        foreach (var unit in _board.Units.OrderBy(unit => unit.Order).Reverse().ToList())
+        {
+            AddUnitBar(unit);
+        }
+    }
+
+    public void AddUnitBar(Unit unit)
+    {
+        if (unit.Faction == Faction.Human)
+        {
+            var unitBar = Instantiate(_leftUnitPrefab, _leftSideContainer.transform);
+            unitBar.Init(unit);
+            _unitBars.Add(unitBar);
+        }
+        else
+        {
+            var unitBar = Instantiate(_rightUnitPrefab, _rightSideContainer.transform);
+            unitBar.Init(unit);
+            _unitBars.Add(unitBar);
         }
     }
 

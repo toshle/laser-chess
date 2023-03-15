@@ -16,6 +16,8 @@ public class Board : MonoBehaviour
 
     private Tile _selectedTile;
 
+    public static event Action<Unit> UnitSpawned;
+
     public Tile SelectedTile
     {
         get { return _selectedTile; }
@@ -51,6 +53,7 @@ public class Board : MonoBehaviour
     public void AddUnit(Unit unit)
     {
         _units.Add(unit);
+        _units = _units.OrderBy(unit => unit.Order).ToList();
     }
 
     private void OnSelectTile(Tile tile)
@@ -101,35 +104,12 @@ public class Board : MonoBehaviour
             }
         }
     }
-
-/*    public void SpawnUnits(List<UnitSpawnPoint> units)
-    {
-        foreach (var unitSpawnPoint in units)
-        {
-            var spawnedUnit = Instantiate(unitSpawnPoint.Unit.UnitPrefab, _unitsContainer.transform);
-            var tile = _tileDict[new Vector2(unitSpawnPoint.x, unitSpawnPoint.y)];
-            spawnedUnit.Init();
-            spawnedUnit.Movement.MoveTo(tile);
-            if(unitSpawnPoint.y >= _height - 4)
-            {
-                spawnedUnit.transform.LookAt(transform.position - new Vector3(0, 0, 1) + new Vector3(0, 0.5f, 0), Vector3.up);
-            }
-            if (unitSpawnPoint.y <= 3)
-            {
-                spawnedUnit.transform.LookAt(transform.position + new Vector3(0, 0.5f, 1), Vector3.up);
-            }
-            _units.Add(spawnedUnit);
-        }
-    }*/
-
     public void SpawnUnit(UnitSO unit, Tile tile)
     {
         var spawnedUnit = Instantiate(unit.UnitPrefab, _unitsContainer.transform);
         spawnedUnit.Board = this;
         spawnedUnit.transform.localPosition = new Vector3(tile.Position.x, 0.5f, tile.Position.y);
-
-        //spawnedUnit.Init();
-        //spawnedUnit.Movement.MoveTo(tile);
+        spawnedUnit.Init();
         if (tile.Position.y >= _height - 4)
         {
             spawnedUnit.transform.LookAt(transform.position - new Vector3(0, 0, 1) + new Vector3(0, 0.5f, 0), Vector3.up);
@@ -138,7 +118,8 @@ public class Board : MonoBehaviour
         {
             spawnedUnit.transform.LookAt(transform.position + new Vector3(0, 0.5f, 1), Vector3.up);
         }
-        //_units.Add(spawnedUnit);
+
+        UnitSpawned?.Invoke(spawnedUnit);
     }
 
     public List<Tile> GetTilesInDirection(Tile startTile, Vector2 direction, int range = 0)
@@ -185,7 +166,10 @@ public class Board : MonoBehaviour
         {
             for (var z = 0; z < _height; z++)
             {
-                Gizmos.DrawCube(new Vector3(x, 0, z), new Vector3(0.95f, 0.001f, 0.95f));
+                Gizmos.DrawLine(transform.position + new Vector3(-0.45f + x, 0, -0.45f + z), transform.position + new Vector3(-0.45f + x, 0, 0.45f + z));
+                Gizmos.DrawLine(transform.position + new Vector3(0.45f + x, 0, 0.45f + z), transform.position + new Vector3(-0.45f + x, 0, 0.45f + z));
+                Gizmos.DrawLine(transform.position + new Vector3(0.45f + x, 0, 0.45f + z), transform.position + new Vector3(0.45f + x, 0, -0.45f + z));
+                Gizmos.DrawLine(transform.position + new Vector3(-0.45f + x, 0, -0.45f + z), transform.position + new Vector3(0.45f + x, 0, -0.45f + z));
             }
         }
     }
