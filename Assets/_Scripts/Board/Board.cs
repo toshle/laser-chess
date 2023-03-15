@@ -159,18 +159,23 @@ public class Board : MonoBehaviour
         return null;
     }
 
+    #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        Gizmos.color = new Color(0, 1, 1, 1);
-        for (var x = 0; x < _width; x++)
+        if (Application.isEditor)
         {
-            for (var z = 0; z < _height; z++)
+            Gizmos.color = new Color(0, 1, 1, 1);
+            for (var x = 0; x < _width; x++)
             {
-                Gizmos.DrawLine(transform.position + new Vector3(-0.45f + x, 0, -0.45f + z), transform.position + new Vector3(-0.45f + x, 0, 0.45f + z));
-                Gizmos.DrawLine(transform.position + new Vector3(0.45f + x, 0, 0.45f + z), transform.position + new Vector3(-0.45f + x, 0, 0.45f + z));
-                Gizmos.DrawLine(transform.position + new Vector3(0.45f + x, 0, 0.45f + z), transform.position + new Vector3(0.45f + x, 0, -0.45f + z));
-                Gizmos.DrawLine(transform.position + new Vector3(-0.45f + x, 0, -0.45f + z), transform.position + new Vector3(0.45f + x, 0, -0.45f + z));
+                for (var z = 0; z < _height; z++)
+                {
+                    Gizmos.DrawLine(transform.position + new Vector3(-0.45f + x, 0, -0.45f + z), transform.position + new Vector3(-0.45f + x, 0, 0.45f + z));
+                    Gizmos.DrawLine(transform.position + new Vector3(0.45f + x, 0, 0.45f + z), transform.position + new Vector3(-0.45f + x, 0, 0.45f + z));
+                    Gizmos.DrawLine(transform.position + new Vector3(0.45f + x, 0, 0.45f + z), transform.position + new Vector3(0.45f + x, 0, -0.45f + z));
+                    Gizmos.DrawLine(transform.position + new Vector3(-0.45f + x, 0, -0.45f + z), transform.position + new Vector3(0.45f + x, 0, -0.45f + z));
+                }
             }
         }
     }
+    #endif
 }

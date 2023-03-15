@@ -1,6 +1,8 @@
 using System;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class Unit : MonoBehaviour
 {
@@ -152,20 +154,23 @@ public class Unit : MonoBehaviour
                 break;
         }
     }
+
+    #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        Gizmos.color = new Color(1, 1, 0, 1);
-        var gizmoSize = 0.8f;
-        Gizmos.DrawLine(new Vector3(-gizmoSize / 2 + transform.position.x, 0, -gizmoSize / 2 + transform.position.z), new Vector3(-gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z));
-        Gizmos.DrawLine(new Vector3(gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z), new Vector3(-gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z));
-        Gizmos.DrawLine(new Vector3(gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z), new Vector3(gizmoSize / 2 + transform.position.x, 0, -gizmoSize / 2 + transform.position.z));
-        Gizmos.DrawLine(new Vector3(-gizmoSize / 2f + transform.position.x, 0, -gizmoSize / 2 + transform.position.z), new Vector3(gizmoSize / 2 + transform.position.x, 0, -gizmoSize / 2 + transform.position.z));
-        var style = GUIStyle.none;
-        style.fontSize = 32;
-        style.alignment = TextAnchor.MiddleCenter;
+            Gizmos.color = new Color(1, 1, 0, 1);
+            var gizmoSize = 0.8f;
+            Gizmos.DrawLine(new Vector3(-gizmoSize / 2 + transform.position.x, 0, -gizmoSize / 2 + transform.position.z), new Vector3(-gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z));
+            Gizmos.DrawLine(new Vector3(gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z), new Vector3(-gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z));
+            Gizmos.DrawLine(new Vector3(gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z), new Vector3(gizmoSize / 2 + transform.position.x, 0, -gizmoSize / 2 + transform.position.z));
+            Gizmos.DrawLine(new Vector3(-gizmoSize / 2f + transform.position.x, 0, -gizmoSize / 2 + transform.position.z), new Vector3(gizmoSize / 2 + transform.position.x, 0, -gizmoSize / 2 + transform.position.z));
+            var style = GUIStyle.none;
+            style.fontSize = 32;
+            style.alignment = TextAnchor.MiddleCenter;
 
-        Handles.Label(transform.position + new Vector3(0, 1.5f, 0), _order.ToString(), style);
+            Handles.Label(transform.position + new Vector3(0, 1.5f, 0), _order.ToString(), style);
     }
+    #endif
 }
 
 public enum UnitState

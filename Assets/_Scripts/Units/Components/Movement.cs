@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -34,16 +33,18 @@ public class Movement : MonoBehaviour
     {
         if (_targetTile != null)
         {
+            
             if (transform.position != _targetTile.transform.position + new Vector3(0, 0.5f, 0))
             {
                 var target = _targetTile.transform.position + new Vector3(0, 0.5f, 0);
                 transform.position = Vector3.Lerp(transform.position, target, _movementSpeed * Time.deltaTime);
-            } else
-            {
-                if (_targetTile.Effect != null)
+                if (_targetTile.Effect != null && Math.Round(Vector3.Distance(transform.position, _targetTile.transform.position), 2) == 0.5f)
                 {
                     _targetTile.Effect.Activate(_unit);
+                    _targetTile = null;
                 }
+            } else
+            {
                 _targetTile = null;
             }
         }

@@ -7,7 +7,7 @@ public class Reinforcement : EffectBase
 
     public override void Activate(Unit triggerUnit)
     {
-        if(unit.Faction == Faction.Human)
+        if(triggerUnit.Faction == Faction.Human)
         {
             Debug.Log("Reinforcement " + unit.name);
             var freeTiles = _board.Tiles.Where(tile => tile.Unit == null && tile.Position.y < 2).ToList();
