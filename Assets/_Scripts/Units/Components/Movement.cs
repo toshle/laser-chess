@@ -96,15 +96,19 @@ public class Movement : MonoBehaviour
         }
     }
 
-    public void MoveTo(Tile tile)
+    public void MoveTo(Tile tile, bool lookAtTarget = true)
     {
         Debug.Log(_unit + " Moving to " + tile);
         _targetTile = tile;
         _unit.Tile.Unit = null;
         tile.Unit = _unit;
         _unit.Tile = tile;
-        var target = _targetTile.transform.position + new Vector3(0, 0.5f, 0);
-        _unit.transform.LookAt(target, Vector3.up);
+
+        if(lookAtTarget)
+        {
+            var target = _targetTile.transform.position + new Vector3(0, 0.5f, 0);
+            _unit.transform.LookAt(target, Vector3.up);
+        }
     }
 
     public List<Tile> CalculatePossibleMoves()

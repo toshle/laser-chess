@@ -686,7 +686,6 @@ MonoBehaviour:
   _attackingColor: {r: 1, g: 1, b: 1, a: 0.78431374}
   _waitingColor: {r: 1, g: 1, b: 1, a: 0.78431374}
   _hightlightFrame: {fileID: 5570375156124471751}
-  _isSelectable: 1
 --- !u!1 &5570375156124471751
 GameObject:
   m_ObjectHideFlags: 0

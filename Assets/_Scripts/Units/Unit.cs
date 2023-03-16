@@ -89,7 +89,7 @@ public class Unit : MonoBehaviour
         _tile = tile;
         tile.Unit = this;
         _board.AddUnit(this);
-        _movement.MoveTo(tile);
+        _movement.MoveTo(tile, false);
     }
 
     private void OnTurnStarted()
@@ -159,11 +159,9 @@ public class Unit : MonoBehaviour
     private void OnDrawGizmos()
     {
             Gizmos.color = new Color(1, 1, 0, 1);
-            var gizmoSize = 0.8f;
-            Gizmos.DrawLine(new Vector3(-gizmoSize / 2 + transform.position.x, 0, -gizmoSize / 2 + transform.position.z), new Vector3(-gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z));
-            Gizmos.DrawLine(new Vector3(gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z), new Vector3(-gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z));
-            Gizmos.DrawLine(new Vector3(gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z), new Vector3(gizmoSize / 2 + transform.position.x, 0, -gizmoSize / 2 + transform.position.z));
-            Gizmos.DrawLine(new Vector3(-gizmoSize / 2f + transform.position.x, 0, -gizmoSize / 2 + transform.position.z), new Vector3(gizmoSize / 2 + transform.position.x, 0, -gizmoSize / 2 + transform.position.z));
+            var gizmoSize = 0.3f;
+            Gizmos.DrawLine(new Vector3(-gizmoSize / 2 + transform.position.x, 0, transform.position.z), new Vector3(gizmoSize / 2 + transform.position.x, 0, transform.position.z));
+            Gizmos.DrawLine(new Vector3(transform.position.x, 0, -gizmoSize / 2 + transform.position.z), new Vector3(transform.position.x, 0, gizmoSize / 2 + transform.position.z));
             var style = GUIStyle.none;
             style.fontSize = 32;
             style.alignment = TextAnchor.MiddleCenter;

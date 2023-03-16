@@ -24,12 +24,10 @@ public abstract class EffectBase : MonoBehaviour
         if (Application.isEditor)
         {
             Gizmos.color = new Color(1, 0, 0, 1);
-            var gizmoSize = 0.6f;
+            var gizmoSize = 0.3f;
 
-            Gizmos.DrawLine(new Vector3(-gizmoSize / 2 + transform.position.x, 0, -gizmoSize / 2 + transform.position.z), new Vector3(-gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z));
-            Gizmos.DrawLine(new Vector3(gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z), new Vector3(-gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z));
-            Gizmos.DrawLine(new Vector3(gizmoSize / 2 + transform.position.x, 0, gizmoSize / 2 + transform.position.z), new Vector3(gizmoSize / 2 + transform.position.x, 0, -gizmoSize / 2 + transform.position.z));
-            Gizmos.DrawLine(new Vector3(-gizmoSize / 2f + transform.position.x, 0, -gizmoSize / 2 + transform.position.z), new Vector3(gizmoSize / 2 + transform.position.x, 0, -gizmoSize / 2 + transform.position.z));
+            Gizmos.DrawLine(new Vector3(-gizmoSize / 2 + transform.position.x, 0, transform.position.z), new Vector3(gizmoSize / 2 + transform.position.x, 0, transform.position.z));
+            Gizmos.DrawLine(new Vector3(transform.position.x, 0, -gizmoSize / 2 + transform.position.z), new Vector3(transform.position.x, 0, gizmoSize / 2 + transform.position.z));
         }
     }
     #endif

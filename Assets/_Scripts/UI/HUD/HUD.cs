@@ -50,7 +50,7 @@ public class HUD : MonoBehaviour
     public void Init(Board board)
     {
         _board = board; 
-        foreach (var unit in _board.Units.OrderBy(unit => unit.Order).Reverse().ToList())
+        foreach (var unit in _board.Units)
         {
             AddUnitBar(unit);
         }
@@ -69,6 +69,14 @@ public class HUD : MonoBehaviour
             var unitBar = Instantiate(_rightUnitPrefab, _rightSideContainer.transform);
             unitBar.Init(unit);
             _unitBars.Add(unitBar);
+        }
+        SortBars();
+    }
+
+    public void SortBars()
+    {
+        foreach(var bar in _unitBars) {
+            bar.transform.SetSiblingIndex(bar.Unit.Order);
         }
     }
 

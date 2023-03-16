@@ -27,6 +27,8 @@ public class UnitBar : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler
     [Header("Selection settings")]
     [SerializeField] private GameObject _hightlightFrame;
 
+    public Unit Unit => _unit;
+
     void Update()
     {
         UpdateHealth(_unit.HP, _unit.MaxHP);
