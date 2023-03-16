@@ -111,15 +111,6 @@ public class Board : MonoBehaviour
         spawnedUnit.transform.localPosition = new Vector3(tile.Position.x, 0.5f, tile.Position.y);
         spawnedUnit.Init();
 
-        if (tile.Position.y >= _height - 4)
-        {
-            spawnedUnit.transform.LookAt(transform.position - new Vector3(0, 0, 1) + new Vector3(0, 0.5f, 0), Vector3.up);
-        }
-        if (tile.Position.y <= 3)
-        {
-            spawnedUnit.transform.LookAt(transform.position + new Vector3(0, 0.5f, 1), Vector3.up);
-        }
-
         UnitSpawned?.Invoke(spawnedUnit);
     }
 
